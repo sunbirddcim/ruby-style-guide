@@ -1,85 +1,22 @@
 # Prelude
 
-> Role models are important. <br/>
-> -- Officer Alex J. Murphy / RoboCop
+This is a fork of [Bozhidar Batsov's Ruby Style Guide](https://github.com/bbatsov/ruby-style-guide).
 
-One thing has always bothered me as a Ruby developer - Python developers
-have a great programming style reference
-([PEP-8](http://www.python.org/dev/peps/pep-0008/)) and we never got
-an official guide, documenting Ruby coding style and best
-practices. And I do believe that style matters. I also believe that a
-great hacker community, such as Ruby has, should be quite capable of
-producing this coveted document.
+In addition to the goals stated there, we would like to:
 
-This guide started its life as our internal company Ruby coding guidelines
-(written by yours truly). At some point I decided that the work I was
-doing might be interesting to members of the Ruby community in general
-and that the world had little need for another internal company
-guideline. But the world could certainly benefit from a
-community-driven and community-sanctioned set of practices, idioms and
-style prescriptions for Ruby programming.
-
-Since the inception of the guide I've received a lot of feedback from
-members of the exceptional Ruby community around the world. Thanks for
-all the suggestions and the support! Together we can make a resource
-beneficial to each and every Ruby developer out there.
-
-By the way, if you're into Rails you might want to check out the
-complementary
-[Ruby on Rails 3 & 4 Style Guide](https://github.com/bbatsov/rails-style-guide).
-
-# The Ruby Style Guide
-
-This Ruby style guide recommends best practices so that real-world Ruby
-programmers can write code that can be maintained by other real-world Ruby
-programmers. A style guide that reflects real-world usage gets used, and a
-style guide that holds to an ideal that has been rejected by the people it is
-supposed to help risks not getting used at all &ndash; no matter how good it is.
-
-The guide is separated into several sections of related rules. I've
-tried to add the rationale behind the rules (if it's omitted I've
-assumed it's pretty obvious).
-
-I didn't come up with all the rules out of nowhere - they are mostly
-based on my extensive career as a professional software engineer,
-feedback and suggestions from members of the Ruby community and
-various highly regarded Ruby programming resources, such as
-["Programming Ruby 1.9"](http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0)
-and ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
-
-There are some areas in which there is no clear consensus in the
-Ruby community regarding a particular style (like string literal quoting,
-spacing inside hash literals, dot position in multi-line method
-chaining, etc.). In such scenarios all popular styles are acknowledged
-and it's up to you to pick one and apply it consistently.
-
-The guide is still a work in progress - some rules are lacking
-examples, some rules don't have examples that illustrate them clearly
-enough. In due time these issues will be addressed - just keep them in
-mind for now.
-
-You can generate a PDF or an HTML copy of this guide using
-[Transmuter](https://github.com/TechnoGate/transmuter).
-
-[RuboCop](https://github.com/bbatsov/rubocop) is a code analyzer,
-based on this style guide.
-
-Translations of the guide are available in the following languages:
-
-* [Chinese Simplified](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
-* [Chinese Traditional](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
-* [French](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
-* [Japanese](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
-* [Spanish](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
-* [Vietnamese](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
+* reduce the need to make stylistic choices by having them made for us,
+* increase the visibility of patterns by removing distractions, and
+* improve our overall quality by avoiding gotchas and corner cases in Ruby.
 
 ## Table of Contents
 
+* [Sandi's Rules](#sandis-rules)
 * [Source Code Layout](#source-code-layout)
 * [Syntax](#syntax)
 * [Naming](#naming)
 * [Comments](#comments)
   * [Comment Annotations](#comment-annotations)
+* [Logging](#logging)
 * [Classes](#classes--modules)
 * [Exceptions](#exceptions)
 * [Collections](#collections)
@@ -89,6 +26,16 @@ Translations of the guide are available in the following languages:
 * [Metaprogramming](#metaprogramming)
 * [Misc](#misc)
 * [Tools](#tools)
+
+## Sandi's Rules
+
+1. No class may be longer than 100 lines.
+2. No method may be longer than 5 lines.
+3. No method may accept more than 4 arguments.
+4. No controller may set more than one instance variable.
+5. No controller may know about more than one class besides itself (and perhaps one additional Presenter class).
+6. Any rule can be broken by consent of the pair or reviewer.
+
 
 ## Source Code Layout
 
@@ -205,40 +152,16 @@ Translations of the guide are available in the following languages:
 
   # good
   e = M * c**2
-  ```
 
-  `{` and `}` deserve a bit of clarification, since they are used
-  for block and hash literals, as well as embedded expressions in
-  strings. For hash literals two styles are considered acceptable.
-
-  ```Ruby
   # good - space after { and before }
   { one: 1, two: 2 }
-
-  # good - no space after { and before }
-  {one: 1, two: 2}
-  ```
-
-  The first variant is slightly more readable (and arguably more
-  popular in the Ruby community in general). The second variant has
-  the advantage of adding visual difference between block and hash
-  literals. Whichever one you pick - apply it consistently.
 
   As far as embedded expressions go, there are also two acceptable
   options:
 
-  ```Ruby
   # good - no spaces
   "string#{expr}"
-
-  # ok - arguably more readable
-  "string#{ expr }"
   ```
-
-  The first style is extremely more popular and you're generally
-  advised to stick with it. The second, on the other hand, is
-  (arguably) a bit more readable. As with hashes - pick one style
-  and apply it consistently.
 
 * No spaces after `(`, `[` or before `]`, `)`.
 
@@ -410,11 +333,9 @@ Translations of the guide are available in the following languages:
                 ' and second part of the long string'
   ```
 
-* Adopt a consistent multi-line method chaining style. There are two
-  popular styles in the Ruby community, both of which are considered
-  good - leading `.` (Option A) and trailing `.` (Option B).
+* Adopt a consistent multi-line method chaining style.
 
-  * **(Option A)** When continuing a chained method invocation on
+  * When continuing a chained method invocation on
     another line keep the `.` on the second line.
 
     ```Ruby
@@ -426,23 +347,6 @@ Translations of the guide are available in the following languages:
     one.two.three
       .four
     ```
-
-  * **(Option B)** When continuing a chained method invocation on another line,
-    include the `.` on the first line to indicate that the
-    expression continues.
-
-    ```Ruby
-    # bad - need to read ahead to the second line to know that the chain continues
-    one.two.three
-      .four
-
-    # good - it's immediately clear that the expression continues beyond the first line
-    one.two.three.
-      four
-    ```
-
-  A discussion on the merits of both alternative styles can be found
-  [here](https://github.com/bbatsov/ruby-style-guide/pull/176).
 
 * Align the parameters of a method call if they span more than one
   line. When aligning parameters is not appropriate due to line-length
@@ -1001,19 +905,7 @@ Translations of the guide are available in the following languages:
   end
   ```
 
-* Avoid `return` where not required for flow of control.
-
-  ```Ruby
-  # bad
-  def some_method(some_arr)
-    return some_arr.size
-  end
-
-  # good
-  def some_method(some_arr)
-    some_arr.size
-  end
-  ```
+* Avoid `return`.
 
 * Avoid `self` where not required. (It is only required when calling a self write accessor.)
 
@@ -1332,7 +1224,7 @@ Translations of the guide are available in the following languages:
   # => 'one, two, three'
   ```
 
-* Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing with a
+* Use `Array()` instead of explicit `Array` check, when dealing with a
   variable you want to treat as an Array, but you're not certain it's
   an array.
 
@@ -1340,9 +1232,6 @@ Translations of the guide are available in the following languages:
   # bad
   paths = [paths] unless paths.is_a? Array
   paths.each { |path| do_something(path) }
-
-  # good
-  [*paths].each { |path| do_something(path) }
 
   # good (and a bit more readable)
   Array(paths).each { |path| do_something(path) }
@@ -1406,9 +1295,10 @@ Translations of the guide are available in the following languages:
 
 * Avoid the use of flip-flops.
 
-* Avoid use of nested conditionals for flow of control.
-  Prefer a guard clause when you can assert invalid data. A guard clause is a conditional
-  statement at the top of a function that bails out as soon as it can.
+* Avoid use of nested conditionals and guard clauses for flow of control.
+  It's almost always wrong to include conditionals **and** computation in
+  the same method. A conditional method's return value should only depend
+  on the value of the object in the condition.
 
   ```Ruby
   # bad
@@ -1425,10 +1315,20 @@ Translations of the guide are available in the following languages:
 
   # good
   def compute_thing(thing)
-    return unless thing[:foo]
+    compute_thing_with_foo(thing) if thing[:foo]
+  end
+
+  def compute_thing_with_foo(thing)
     update_with_bar(thing[:foo])
-    return re_compute(thing) unless thing[:foo][:bar]
-    partial_compute(thing)
+    partial_compute_or_re_compute(thing)
+  end
+
+  def partial_compute_or_re_compute(thing)
+    if thing[:foo][:bar]
+      partial_compute(thing)
+    else
+      re_compute(thing)
+    end
   end
   ```
 
@@ -1663,6 +1563,7 @@ Translations of the guide are available in the following languages:
 * Avoid writing comments to explain bad code. Refactor the code to
   make it self-explanatory. (Do or do not - there is no try. --Yoda)
 
+
 ### Comment Annotations
 
 * Annotations should usually be written on the line immediately above
@@ -1709,6 +1610,21 @@ Translations of the guide are available in the following languages:
 
 * Use other custom annotation keywords if it feels appropriate, but be
   sure to document them in your project's `README` or similar.
+
+
+## Logging
+
+* Only log exceptional circumstances. For example, if you're using a
+  third-party library that has a known bug, and you've written a `rescue`
+  block that provides a safe default value in this case, you don't need to
+  log a message because you're aware of the bad behavior.
+
+* Use either `WARN` or `ERROR` logging if the message is intended to make it
+  into production.
+
+* Use `DEBUG` logging during development, so that even if we happen to miss
+  a log statement during review, it won't show up in production logs.
+
 
 ## Classes & Modules
 
@@ -2055,18 +1971,6 @@ Translations of the guide are available in the following languages:
     # good
     def self.some_other_method
       # body omitted
-    end
-
-    # Also possible and convenient when you
-    # have to define many singleton methods.
-    class << self
-      def first_method
-        # body omitted
-      end
-
-      def second_method_etc
-        # body omitted
-      end
     end
   end
   ```
@@ -2453,7 +2357,7 @@ Translations of the guide are available in the following languages:
   nickname = data['nickname']
 
   # good
-  email, username = data.values_at('email', 'nickname')
+  email, nickname = data.values_at('email', 'nickname')
   ```
 
 * Rely on the fact that as of Ruby 1.9 hashes are ordered.
@@ -2475,18 +2379,9 @@ Translations of the guide are available in the following languages:
   email_with_name = format('%s <%s>', user.name, user.email)
   ```
 
-* Consider padding string interpolation code with space. It more clearly sets the
-  code apart from the string.
+* Adopt a consistent string literal quoting style.
 
-  ```Ruby
-  "#{ user.last_name }, #{ user.first_name }"
-  ```
-
-* Adopt a consistent string literal quoting style. There are two
-  popular styles in the Ruby community, both of which are considered
-  good - single quotes by default (Option A) and double quotes by default (Option B).
-
-  * **(Option A)** Prefer single-quoted strings when you don't need
+  * Prefer single-quoted strings when you don't need
     string interpolation or special symbols such as `\t`, `\n`, `'`,
     etc.
 
@@ -2497,21 +2392,6 @@ Translations of the guide are available in the following languages:
     # good
     name = 'Bozhidar'
     ```
-
-  * **(Option B)** Prefer double-quotes unless your string literal
-    contains `"` or escape characters you want to suppress.
-
-    ```Ruby
-    # bad
-    name = 'Bozhidar'
-
-    # good
-    name = "Bozhidar"
-    ```
-
-  The second style is arguably a bit more popular in the Ruby
-  community. The string literals in this guide, however, are
-  aligned with the first style.
 
 * Don't use the character literal syntax `?x`. Since Ruby 1.9 it's
   basically redundant - `?x` would interpreted as `'x'` (a string with
@@ -2593,6 +2473,10 @@ Translations of the guide are available in the following languages:
   END
   #=> "def test\n  some_method\n  other_method\nend\n"
   ```
+
+  Note that Rails provides
+  [`String#strip_heredoc`](http://api.rubyonrails.org/classes/String.html#method-i-strip_heredoc)
+  to perform this function.
 
 ## Regular Expressions
 
@@ -2809,7 +2693,7 @@ Translations of the guide are available in the following languages:
 
     ```ruby
     # bad
-    def method_missing?(meth, *args, &block)
+    def method_missing(meth, *args, &block)
       if /^find_by_(?<prop>.*)/ =~ meth
         # ... lots of code to do a find_by
       else
@@ -2818,7 +2702,7 @@ Translations of the guide are available in the following languages:
     end
 
     # good
-    def method_missing?(meth, *args, &block)
+    def method_missing(meth, *args, &block)
       if /^find_by_(?<prop>.*)/ =~ meth
         find_by(prop, *args, &block)
       else
@@ -2862,7 +2746,7 @@ Translations of the guide are available in the following languages:
 * Avoid `alias` when `alias_method` will do.
 
 * Use `OptionParser` for parsing complex command line options and
-`ruby -s` for trivial command line options.
+  `ruby -s` for trivial command line options.
 
 * Prefer `Time.now` over `Time.new` when retrieving the current system time.
 
@@ -2875,51 +2759,3 @@ Translations of the guide are available in the following languages:
 * Be consistent. In an ideal world, be consistent with these guidelines.
 
 * Use common sense.
-
-## Tools
-
-Here's some tools to help you automatically check Ruby code against
-this guide.
-
-### RuboCop
-
-[RuboCop](https://github.com/bbatsov/rubocop) is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
-
-### RubyMine
-
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
-
-# Contributing
-
-Nothing written in this guide is set in stone. It's my desire to work
-together with everyone interested in Ruby coding style, so that we could
-ultimately create a resource that will be beneficial to the entire Ruby
-community.
-
-Feel free to open tickets or send pull requests with improvements. Thanks in
-advance for your help!
-
-## How to Contribute?
-
-It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md).
-
-# License
-
-![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
-This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
-
-# Spread the Word
-
-A community-driven style guide is of little use to a community that
-doesn't know about its existence. Tweet about the guide, share it with
-your friends and colleagues. Every comment, suggestion or opinion we
-get makes the guide just a little bit better. And we want to have the
-best possible guide, don't we?
-
-Cheers,<br/>
-[Bozhidar](https://twitter.com/bbatsov)
