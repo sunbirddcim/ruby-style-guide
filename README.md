@@ -34,6 +34,7 @@ In addition to the goals stated there, we would like to:
 3. No method may accept more than 4 arguments.
 4. No controller may set more than one instance variable.
 5. No controller may know about more than one class besides itself (and perhaps one additional Presenter class).
+6. Any rule can be broken by consent of the pair or reviewer.
 
 
 ## Source Code Layout
@@ -1613,7 +1614,16 @@ In addition to the goals stated there, we would like to:
 
 ## Logging
 
-* I don't know what goes here.
+* Only log exceptional circumstances. For example, if you're using a
+  third-party library that has a known bug, and you've written a `rescue`
+  block that provides a safe default value in this case, you don't need to
+  log a message because you're aware of the bad behavior.
+
+* Use either `WARN` or `ERROR` logging if the message is intended to make it
+  into production.
+
+* Use `DEBUG` logging during development, so that even if we happen to miss
+  a log statement during review, it won't show up in production logs.
 
 
 ## Classes & Modules
